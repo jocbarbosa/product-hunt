@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const requireDir = require('require-dir');
@@ -15,6 +16,6 @@ mongoose.connect(process.env.STRING_CONNECTION, {
 
 requireDir('./src/models/');
 
-app.use(require('/api', './src/routes'));
+app.use('/api', require('./src/routes'));
 
-app.listen(3333);
+app.listen(process.env.PORT);
