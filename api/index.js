@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 
-mongoose.connect("mongodb://localhost:27017/nodeapi", {
+mongoose.connect(process.env.STRING_CONNECTION, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
