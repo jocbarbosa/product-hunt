@@ -1,28 +1,67 @@
 import React, { Component } from 'react';
 import api from '../../services/api';
 
+import './styles.css';
+
 export default class Main extends Component {
 
     state = {
-        products: []
+        products: [],
+        productInfo: {},
+        page: 1
     }
 
     componentDidMount() {
         this.loadProducts();
     }
 
-    loadProducts = async () => {
-        const response = await api.get('/products');
+    loadProducts = async (page = 1) => {
+        const response = await api.get(`/products?page=${page}`);
 
-        this.setState({ products: response.data.docs })
+        const { docs, ...productInfo } = response.data;
+
+        this.setState({ products: response.data.docs, productInfo, page })
     }
 
+    prevPage = () => {
+        const { page, productInfo } = this.state;
+
+        if (page === 1) return;
+
+        const pageNumber = page - 1;
+
+        this.loadProducts(pageNumber);
+    };
+
+    nextPage = () => {
+        const { page, productInfo } = this.state;
+
+        if (page === productInfo.pages) return;
+
+        const pageNumber = page + 1;
+
+        this.loadProducts(pageNumber);
+    };
+
+
     render() {
+
+        const { products } = this.state;
         return (
             <div className="product-list">
-                {this.state.products.map(product => {
-                    return <h2 key={product._id}>{product.title}</h2>
+                {products.map(product => {
+                    return <article key={product._id}>
+                        <strong>{product.title}</strong>
+                        <p>{product.description}</p>
+
+                        <a href="#">Detalhes</a>
+                    </article>
                 })}
+
+                <div className="actions">
+                    <button onClick={this.prevPage}>Anterior</button>
+                    <button onClick={this.nextPage}>Próximo</button>
+                </div>
             </div>
         )
     }

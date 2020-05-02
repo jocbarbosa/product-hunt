@@ -4,7 +4,7 @@ import './styles.css';
 
 const Header = () => (
     <header id="main-header">
-        JSHUNT
+        Product Hunt
     </header>
 );
 
